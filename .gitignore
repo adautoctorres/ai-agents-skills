@@ -13,4 +13,5 @@ wheels/
 .env
 
 # Pasta de relatos gerados
+input
 relatos
