@@ -25,7 +25,6 @@ Envie o texto bruto ao agente (via `@gitlab-report-formatter` ou invocando o sub
 
 **Saída:**
 - Markdown puro com `**seções em negrito**` (sem headers `#`/`##`)
-- Checkboxes `- [ ]` para itens de ação
 - Sem labels GitLab
 - Seções opcionais (Riscos, Impedimentos, Observações) apenas se houver conteúdo real no texto de entrada
 
