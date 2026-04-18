@@ -6,10 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Composto por arquivos Markdown de configuração e scripts Python para servidores MCP.
 
+## Privacidade e dados sensíveis
+
+Nunca incluir em documentação, relatos, commits ou respostas: tokens, senhas, URLs internas de cluster, dados de conexão (DSN, hosts, portas), usuários de serviço ou qualquer credencial e dados de contextos do Kubernetes. Use variáveis de ambiente como referência. Esta regra se aplica a todos os artefatos gerados neste repositório.
+
 ## Configuração
 
 - Linguagem padrão: **pt-BR** (definida em `.claude/settings.json`)
-- Dependências Python: `anthropic`, `mcp`, `oracledb`, `dotenv` — gerenciadas via `uv`
+- Dependências Python: `anthropic`, `mcp`, `oracledb`, `dotenv`, `pyyaml` — gerenciadas via `uv` com `pyproject.toml` como única fonte de verdade. Para instalar: `uv sync`. Nunca criar `requirements.txt` avulsos.
 
 ## Slash Command (`.claude/commands/`)
 
@@ -37,7 +41,17 @@ Servidor MCP para acesso a banco de dados Oracle via `oracledb`. Ferramentas exp
 
 Requer variáveis de ambiente: `ORACLE_USER`, `ORACLE_PASSWORD`, `ORACLE_DSN`.
 
-Registro: `claude mcp add --scope local mcp-oracle python mcps/oracle/mcp-oracle.py`
+Registro: `make mcp-add` — remoção: `make mcp-remove`.
+
+### `mcps/k8s/mcp-k8s.py`
+
+Servidor MCP para interação segura com clusters Kubernetes via `kubectl`. Ferramentas expostas: `k8s_list_contexts`, `k8s_get_current_context`, `k8s_switch_context`, `k8s_get_pods`, `k8s_get_services`, `k8s_get_nodes`, `k8s_describe_resource`, `k8s_get_logs`.
+
+Apenas operações de leitura permitidas (whitelist: `get`, `describe`, `logs`, `config`). Comandos destrutivos bloqueados. Saída sempre em JSON com campos `status`, `context`, `command`, `data`, `timestamp`.
+
+Variáveis de ambiente opcionais: `KUBECONFIG` (padrão: `~/.kube/config`), `KUBECTL_TIMEOUT` (padrão: `30`).
+
+Registro: `make mcp-k8s-add` — remoção: `make mcp-k8s-remove`.
 
 ## Relatos (`relatos/`)
 
