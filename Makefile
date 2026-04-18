@@ -1,8 +1,7 @@
-.PHONY:
+.PHONY: mcp-add mcp-remove
 
-install-agents:
-	mkdir -p ~/.claude/agents
-	cp .claude/agents/* ~/.claude/agents/
+mcp-add:
+	claude mcp add --scope local mcp-oracle python mcps/oracle/mcp-oracle.py
 
-uninstall-agents:
-	rm -rf ~/.claude/agents
+mcp-remove:
+	claude mcp remove mcp-oracle --scope local
