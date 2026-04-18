@@ -1,3 +1,5 @@
+Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Centraliza automações de produtividade — formatação de relatos para GitLab, acesso a bancos Oracle via MCP e templates reutilizáveis para documentação técnica.
+
 ## Estrutura
 
 ```
@@ -18,8 +20,8 @@
 ## Pré-requisitos
 
 ```bash
-uv venv        # cria o ambiente virtual em .venv
-uv sync        # instala as dependências do pyproject.toml
+uv venv   # cria o ambiente virtual em .venv
+uv sync   # instala as dependências do pyproject.toml
 ```
 
 ## Slash Commands
@@ -52,14 +54,13 @@ Pastas em `.claude/skills/` com templates e lógica própria:
 ### Registrar
 
 ```bash
-claude mcp add --scope local mcp-oracle python mcps/oracle/mcp-oracle.py
+make mcp-add
 ```
 
 ### Remover
 
 ```bash
-claude mcp remove mcp-oracle --scope local
-
+make mcp-remove
 ```
 
 ### Ferramentas disponíveis
