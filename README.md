@@ -1,4 +1,4 @@
-# my-ai-agents-skills
+# ai-agents-skills
 
 Repositório pessoal de agentes de IA e skills para o Claude Code.
 
