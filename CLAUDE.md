@@ -45,9 +45,10 @@ Registro: `make mcp-add` — remoção: `make mcp-remove`.
 
 ### `mcps/k8s/mcp-k8s.py`
 
-Servidor MCP para interação segura com clusters Kubernetes via `kubectl`. Ferramentas expostas: `k8s_list_contexts`, `k8s_get_current_context`, `k8s_switch_context`, `k8s_get_pods`, `k8s_get_services`, `k8s_get_nodes`, `k8s_describe_resource`, `k8s_get_logs`.
-
+Servidor MCP para interação segura com clusters Kubernetes via `kubectl`. 
 Apenas operações de leitura permitidas (whitelist: `get`, `describe`, `logs`, `config`). Comandos destrutivos bloqueados. Saída sempre em JSON com campos `status`, `context`, `command`, `data`, `timestamp`.
+
+Ferramentas expostas: `k8s_list_contexts`, `k8s_get_current_context`, `k8s_switch_context`, `k8s_get_pods`, `k8s_get_services`, `k8s_get_nodes`, `k8s_get_namespaces`, `k8s_describe_resource`, `k8s_get_logs`.
 
 Variáveis de ambiente opcionais: `KUBECONFIG` (padrão: `~/.kube/config`), `KUBECTL_TIMEOUT` (padrão: `30`).
 

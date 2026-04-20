@@ -314,6 +314,12 @@ class GetNodesInput(BaseModel):
     context: Optional[str] = Field(default=None, description="Contexto kubeconfig.")
 
 
+class GetNamespacesInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    context: Optional[str] = Field(default=None, description="Contexto kubeconfig.")
+
+
 # ---------------------------------------------------------------------------
 # Ferramentas MCP
 # ---------------------------------------------------------------------------
@@ -622,6 +628,51 @@ async def k8s_get_nodes(params: GetNodesInput) -> str:
             for n in items
         ]
         result["data"] = {"total": len(nodes), "nodes": nodes}
+
+    return _to_json(result)
+
+
+@mcp.tool(
+    name="k8s_get_namespaces",
+    annotations={
+        "title": "Listar namespaces Kubernetes",
+        "readOnlyHint": True,
+        "destructiveHint": False,
+        "idempotentHint": True,
+        "openWorldHint": True,
+    },
+)
+async def k8s_get_namespaces(params: GetNamespacesInput) -> str:
+    """Lista todos os namespaces do cluster Kubernetes.
+
+    Executa `kubectl get namespaces -o json`.
+
+    Args:
+        params (GetNamespacesInput):
+            - context (Optional[str]): contexto kubeconfig; omitir para usar o ativo
+
+    Returns:
+        str: JSON com lista de namespaces: nome, status e data de criação.
+
+    Exemplos:
+        - "Quais namespaces existem no cluster?" → use este tool
+        - "Liste os namespaces disponíveis" → use este tool
+    """
+    result = await asyncio.to_thread(
+        _run_kubectl, ["get", "namespaces", "-o", "json"], params.context
+    )
+
+    if result["status"] == "success" and isinstance(result.get("data"), dict):
+        items = result["data"].get("items", [])
+        namespaces = [
+            {
+                "name": ns.get("metadata", {}).get("name"),
+                "status": ns.get("status", {}).get("phase"),
+                "age": ns.get("metadata", {}).get("creationTimestamp"),
+            }
+            for ns in items
+        ]
+        result["data"] = {"total": len(namespaces), "namespaces": namespaces}
 
     return _to_json(result)
 
