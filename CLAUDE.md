@@ -54,6 +54,21 @@ Variáveis de ambiente opcionais: `KUBECONFIG` (padrão: `~/.kube/config`), `KUB
 
 Registro: `make mcp-k8s-add` — remoção: `make mcp-k8s-remove`.
 
+### `mcps/gitlab/mcp-gitlab.py`
+
+Servidor MCP para acesso ao GitLab corporativo com leitura irrestrita e escrita controlada por flag.
+O token nunca é exposto ao agente. Toda operação valida se o recurso pertence ao `GITLAB_GROUP_PATH`.
+Rate limiting separado para leitura e escrita. Cache com TTL de 120s. Logs de auditoria em todas as operações.
+
+Ferramentas de leitura: `gitlab_list_projects`, `gitlab_get_project`, `gitlab_list_merge_requests`, `gitlab_list_issues`, `gitlab_get_file_content`, `gitlab_search_code`, `gitlab_get_issue_notes`, `gitlab_get_user_activity`.
+
+Ferramentas de escrita (requerem `GITLAB_WRITE_ENABLED=true`): `gitlab_create_issue`, `gitlab_add_issue_comment`.
+
+Variáveis de ambiente obrigatórias: `GITLAB_URL`, `GITLAB_TOKEN`, `GITLAB_GROUP_PATH`.
+Opcionais: `GITLAB_TIMEOUT` (padrão: `30`), `GITLAB_RATE_LIMIT` (padrão: `60`), `GITLAB_WRITE_ENABLED` (padrão: `false`), `GITLAB_WRITE_RATE_LIMIT` (padrão: `10`), `GITLAB_DRY_RUN` (padrão: `false`), `GITLAB_AGENT_LABEL` (padrão: `created-by-agent`).
+
+Registro: `make mcp-gitlab-add` — remoção: `make mcp-gitlab-remove`.
+
 ## Relatos (`relatos/`)
 
 Pasta com os relatos gerados pelo `gitlab-report-formatter`, prontos para colar em issues do GitLab.
