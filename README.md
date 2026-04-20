@@ -25,6 +25,14 @@ uv venv   # cria o ambiente virtual em .venv
 uv sync   # instala as dependências do pyproject.toml
 ```
 
+## Agentes
+
+Sub-agentes em `.claude/agents/`, invocáveis automaticamente pelo Claude Code ou explicitamente via `use the agent X`:
+
+| Agente | O que faz |
+|---|---|
+| `gitlab-agent` | Consulta projetos, issues, MRs, código e atividade de usuários via MCP GitLab; formata e cria relatos estruturados prontos para publicar como issues |
+
 ## Slash Commands
 
 Arquivos únicos em `.claude/commands/`:

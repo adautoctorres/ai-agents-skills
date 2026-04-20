@@ -15,6 +15,18 @@ Nunca incluir em documentação, relatos, commits ou respostas: tokens, senhas, 
 - Linguagem padrão: **pt-BR** (definida em `.claude/settings.json`)
 - Dependências Python: `anthropic`, `mcp`, `oracledb`, `dotenv`, `pyyaml` — gerenciadas via `uv` com `pyproject.toml` como única fonte de verdade. Para instalar: `uv sync`. Nunca criar `requirements.txt` avulsos.
 
+## Agentes (`.claude/agents/`)
+
+### `gitlab-agent`
+
+Agente especialista em GitLab corporativo. Combina consultas via MCP GitLab com formatação de relatos estruturados prontos para issues.
+
+**Capacidades:** listar projetos, MRs, issues e atividade de usuários; buscar código; criar issues; formatar relatos usando os templates da skill `gitlab-report-formatter`; salvar relatos em `relatos/`.
+
+**Ferramentas:** todas as ferramentas do `mcp-gitlab` + `Read`, `Write`, `Glob`.
+
+**Gatilhos típicos:** "o que usuário fez essa semana?", "formata esse apoio técnico e abre a issue", "lista as issues abertas do projeto X".
+
 ## Slash Command (`.claude/commands/`)
 
 ### `/gitlab-report-formatter`
