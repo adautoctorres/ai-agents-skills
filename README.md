@@ -57,8 +57,8 @@ Pastas em `.claude/skills/` com templates e lógica própria:
 Acesso a banco de dados Oracle via `oracledb`.
 
 ```bash
-make mcp-add      # registrar
-make mcp-remove   # remover
+make mcp-oracle-add      # registrar
+make mcp-oracle-remove   # remover
 ```
 
 | Ferramenta | Descrição |
