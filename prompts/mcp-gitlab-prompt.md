@@ -1,10 +1,3 @@
-Boa evolução — mas aqui precisa de um cuidado:
-👉 você está saindo de **read-only** para **write**, então a superfície de risco aumenta bastante.
-
-Vou te entregar o prompt já ajustado com **controle fino de permissão**, mantendo segurança e governança.
-
----
-
 ## 🧠 Prompt Atualizado — MCP GitLab com Escrita Controlada
 
 ---
@@ -196,10 +189,3 @@ Daria pra evoluir isso pra:
 * aprovação humana antes de criar issue
 * integração com pipeline (ex: erro → cria issue)
 * tagging automático via IA
-
----
-
-Se quiser, eu posso dar o próximo passo e te entregar:
-
-👉 código Python real desse MCP (já com FastAPI + validações + GitLab API)
-👉 ou arquitetura com Kafka (bem no teu contexto)

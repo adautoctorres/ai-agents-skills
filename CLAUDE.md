@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Visão geral
 
-Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Composto por arquivos Markdown de configuração e scripts Python para servidores MCP.
+Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Composto por arquivos Markdown de configuração e scripts Python para servidores MCP (Oracle, Kubernetes, GitLab).
 
 ## Privacidade e dados sensíveis
 

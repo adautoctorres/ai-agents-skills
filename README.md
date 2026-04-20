@@ -1,4 +1,4 @@
-Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Centraliza automações de produtividade — formatação de relatos para GitLab, acesso a bancos Oracle via MCP e templates reutilizáveis para documentação técnica.
+Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Centraliza automações de produtividade — formatação de relatos para GitLab, acesso a bancos Oracle, interação com Kubernetes e integração com GitLab corporativo via MCP.
 
 ## Estrutura
 
@@ -9,10 +9,11 @@ Repositório pessoal de agentes, skills e servidores MCP para o Claude Code. Cen
 │   ├── commands/        # Slash commands simples (atalhos de prompt)
 │   ├── skills/          # Skills avançadas com templates e lógica própria
 │   └── settings.json    # Configuração local (idioma, permissões)
-├── docs/                # Guias detalhados
 ├── input/               # Arquivos de entrada para processamento
 ├── mcps/
-│   └── oracle/          # Servidor MCP para banco Oracle
+│   ├── oracle/          # Servidor MCP para banco Oracle
+│   ├── k8s/             # Servidor MCP para Kubernetes (somente leitura)
+│   └── gitlab/          # Servidor MCP para GitLab corporativo
 ├── relatos/             # Relatos gerados pelo gitlab-report-formatter
 └── pyproject.toml       # Dependências Python (mcp, oracledb, anthropic)
 ```
@@ -51,37 +52,83 @@ Pastas em `.claude/skills/` com templates e lógica própria:
 
 ## Servidores MCP
 
-### Registrar
+### mcp-oracle
+
+Acesso a banco de dados Oracle via `oracledb`.
 
 ```bash
-make mcp-add
+make mcp-add      # registrar
+make mcp-remove   # remover
 ```
 
-### Remover
+| Ferramenta | Descrição |
+|---|---|
+| `executar_query` | Executa SELECT e retorna resultados |
+| `executar_dml` | Executa INSERT/UPDATE/DELETE |
+| `listar_tabelas` | Lista tabelas do schema |
+| `descrever_tabela` | Descreve colunas de uma tabela |
+| `executar_procedure` | Chama stored procedure |
+
+Variáveis de ambiente: `ORACLE_USER`, `ORACLE_PASSWORD`, `ORACLE_DSN`
+
+---
+
+### mcp-k8s
+
+Interação segura com clusters Kubernetes via `kubectl` (somente leitura).
 
 ```bash
-make mcp-remove
+make mcp-k8s-add      # registrar
+make mcp-k8s-remove   # remover
 ```
 
-### Ferramentas disponíveis
+| Ferramenta | Descrição |
+|---|---|
+| `k8s_list_contexts` | Lista contextos disponíveis no kubeconfig |
+| `k8s_get_current_context` | Retorna o contexto ativo |
+| `k8s_switch_context` | Troca o contexto ativo |
+| `k8s_get_pods` | Lista pods de um namespace |
+| `k8s_get_services` | Lista services de um namespace |
+| `k8s_get_nodes` | Lista nós do cluster |
+| `k8s_get_namespaces` | Lista namespaces disponíveis |
+| `k8s_describe_resource` | Descreve um recurso Kubernetes |
+| `k8s_get_logs` | Retorna logs de um pod |
 
-| Servidor | Ferramenta MCP | Parâmetros |
-|----------|----------------|------------|
-| `mcp-oracle` | `mcp__mcp-oracle__executar_query` | `sql: str`, `parametros?: dict` |
-| `mcp-oracle` | `mcp__mcp-oracle__executar_dml` | `sql: str`, `parametros?: dict` |
-| `mcp-oracle` | `mcp__mcp-oracle__listar_tabelas` | `schema?: str` |
-| `mcp-oracle` | `mcp__mcp-oracle__descrever_tabela` | `tabela: str`, `schema?: str` |
-| `mcp-oracle` | `mcp__mcp-oracle__executar_procedure` | `nome: str`, `parametros?: dict` |
+Variáveis de ambiente opcionais: `KUBECONFIG` (padrão: `~/.kube/config`), `KUBECTL_TIMEOUT` (padrão: `30`)
 
-### Variáveis de ambiente (mcp-oracle)
+---
+
+### mcp-gitlab
+
+Acesso ao GitLab corporativo com leitura irrestrita e escrita controlada por flag. Veja o [README completo](mcps/gitlab/README.md).
 
 ```bash
-ORACLE_USER=usuario
-ORACLE_PASSWORD=senha
-ORACLE_DSN=host:porta/service_name   # ex: localhost:1521/XEPDB1
+make mcp-gitlab-add      # registrar
+make mcp-gitlab-remove   # remover
 ```
+
+**Ferramentas de leitura:**
+
+| Ferramenta | Descrição |
+|---|---|
+| `gitlab_list_projects` | Lista projetos do grupo |
+| `gitlab_get_project` | Metadados de um projeto |
+| `gitlab_list_merge_requests` | Lista MRs de um projeto |
+| `gitlab_list_issues` | Lista issues com filtros |
+| `gitlab_get_file_content` | Conteúdo de arquivo de um repositório |
+| `gitlab_search_code` | Busca código no grupo |
+| `gitlab_get_issue_notes` | Comentários de uma issue |
+| `gitlab_get_user_activity` | Atividade de um usuário no grupo |
+
+**Ferramentas de escrita** (requerem `GITLAB_WRITE_ENABLED=true`):
+
+| Ferramenta | Descrição |
+|---|---|
+| `gitlab_create_issue` | Cria issue com deduplicação automática |
+| `gitlab_add_issue_comment` | Adiciona comentário em issue existente |
+
+Variáveis de ambiente obrigatórias: `GITLAB_URL`, `GITLAB_TOKEN`, `GITLAB_GROUP_PATH`
 
 ## Documentação
 
-- [Skills e Slash Commands](docs/guia-skills.md)
-- [Servidor MCP Oracle](docs/guia-mcp.md)
+- [Servidor MCP GitLab](mcps/gitlab/README.md)
